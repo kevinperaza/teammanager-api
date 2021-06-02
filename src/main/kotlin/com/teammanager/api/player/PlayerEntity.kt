@@ -4,8 +4,6 @@ import com.teammanager.api.team.TeamEntity
 import java.util.*
 import javax.persistence.*
 
-//https://www.section.io/engineering-education/introduction-spring-data/
-
 enum class Position { GOALKEEPER, DEFENDER, MIDFIELDER, STRIKER }
 
 @Entity
