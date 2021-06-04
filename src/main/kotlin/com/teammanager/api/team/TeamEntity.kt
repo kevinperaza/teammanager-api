@@ -12,11 +12,15 @@ class TeamEntity(
     var id: UUID,
     var name: String,
     var owner: String,
-    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "team")
+    @OneToMany(
+        mappedBy = "team",
+        cascade = arrayOf(CascadeType.ALL),
+        fetch = FetchType.EAGER
+    )
     var players: MutableList<PlayerEntity> = mutableListOf(),
-    var league: String,
+    var league: String?,
 ) {
-    fun toDto(): TeamDTO = TeamDTO(
+    fun toDto(): TeamEntityDTO = TeamEntityDTO(
         this.id,
         this.name,
         this.owner,
@@ -25,8 +29,8 @@ class TeamEntity(
     )
 
     companion object {
-        fun fromDto(dto: TeamDTO): TeamEntity = TeamEntity(
-            dto.id ?: UUID.randomUUID(),
+        fun fromDto(dto: TeamEntityDTO): TeamEntity = TeamEntity(
+            dto.id,
             dto.name,
             dto.owner,
             dto.players.map {

@@ -18,7 +18,7 @@ class TeamController(val teamService: TeamService) {
     }
 
     @PostMapping("/add")
-    fun addTeam(@RequestBody teamDTO: TeamDTO) = try {
+    fun addTeam(@RequestBody teamDTO: AddTeamPayloadDTO) = try {
         ResponseEntity.ok(teamService.add(teamDTO))
     } catch (e: Exception) {
         val msg = "Something went wrong: " + e.message
@@ -27,7 +27,7 @@ class TeamController(val teamService: TeamService) {
 
 
     @PutMapping("/update/{id}")
-    fun updateTeam(@PathVariable id: UUID, @RequestBody teamDTO: TeamDTO): ResponseEntity<Any> {
+    fun updateTeam(@PathVariable id: UUID, @RequestBody teamDTO: UpdateTeamPayloadDTO): ResponseEntity<Any> {
         assert(teamDTO.id == id)
         return try {
             ResponseEntity.ok(teamService.update(teamDTO))
@@ -35,7 +35,6 @@ class TeamController(val teamService: TeamService) {
             val msg = "Something went wrong: " + e.message
             ResponseEntity(msg, HttpStatus.INTERNAL_SERVER_ERROR)
         }
-
     }
 
     @DeleteMapping("/delete/{id}")
