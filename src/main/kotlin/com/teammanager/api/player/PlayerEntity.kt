@@ -11,8 +11,7 @@ enum class Position { GOALKEEPER, DEFENDER, MIDFIELDER, STRIKER }
 class PlayerEntity(
     @Id
     var id: UUID,
-    @ManyToOne
-    @JoinColumn(name = "team_id")
+    @ManyToOne(fetch = FetchType.LAZY)
     var team: TeamEntity? = null,
     var firstName: String,
     var lastName: String,

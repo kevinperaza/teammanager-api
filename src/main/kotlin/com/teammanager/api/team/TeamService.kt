@@ -39,9 +39,11 @@ class TeamService(val teamRepository: TeamRepository, val playerRepository: Play
             teamDTO.league,
         )
 
-        return teamRepository.save(
-            TeamEntity.fromDto(currentTeam merge team)
-        ).toDto()
+        val updatedTeamDTO = currentTeam merge team
+
+        val updatedTeamEntity = TeamEntity.fromDto(updatedTeamDTO)
+
+        return teamRepository.save(updatedTeamEntity).toDto()
     }
 
     fun delete(id: UUID) = teamRepository.deleteById(id);

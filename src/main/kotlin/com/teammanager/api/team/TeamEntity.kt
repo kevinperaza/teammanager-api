@@ -15,7 +15,7 @@ class TeamEntity(
     @OneToMany(
         mappedBy = "team",
         cascade = arrayOf(CascadeType.ALL),
-        fetch = FetchType.EAGER
+        orphanRemoval = true
     )
     var players: MutableList<PlayerEntity> = mutableListOf(),
     var league: String?,
