@@ -1,12 +1,17 @@
 package com.teammanager.api.team
 
+import com.teammanager.api.league.LeagueRepository
 import com.teammanager.api.player.PlayerRepository
 import com.teammanager.api.utils.merge
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class TeamService(val teamRepository: TeamRepository, val playerRepository: PlayerRepository) {
+class TeamService(
+    val teamRepository: TeamRepository,
+    val leagueRepository: LeagueRepository,
+    val playerRepository: PlayerRepository
+) {
 
     fun all() = teamRepository.findAll().map { it.toDto() };
 
@@ -19,7 +24,9 @@ class TeamService(val teamRepository: TeamRepository, val playerRepository: Play
             teamDTO.players?.map {
                 playerRepository.findById(it).get().toDto()
             }?.toMutableList() ?: mutableListOf(),
-            teamDTO.league,
+            teamDTO.league?.let {
+                leagueRepository.findById(it)
+            }?.get()?.toDto()
         )
 
         return teamRepository.save(TeamEntity.fromDto(team)).toDto();
@@ -36,7 +43,9 @@ class TeamService(val teamRepository: TeamRepository, val playerRepository: Play
                 playerRepository.findById(it).get().toDto()
             }?.toMutableList()
                 ?: currentTeam.players,
-            teamDTO.league,
+            teamDTO.league?.let {
+                leagueRepository.findById(it)
+            }?.get()?.toDto()
         )
 
         val updatedTeamDTO = currentTeam merge team

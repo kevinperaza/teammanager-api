@@ -1,6 +1,7 @@
 package com.teammanager.api.team
 
 
+import com.teammanager.api.league.LeagueEntity
 import com.teammanager.api.player.PlayerEntity
 import java.util.*
 import javax.persistence.*
@@ -18,14 +19,16 @@ class TeamEntity(
         orphanRemoval = true
     )
     var players: MutableList<PlayerEntity> = mutableListOf(),
-    var league: String?,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    var league: LeagueEntity? = null,
 ) {
     fun toDto(): TeamEntityDTO = TeamEntityDTO(
         this.id,
         this.name,
         this.owner,
         this.players.map { it.toDto() }.toMutableList(),
-        this.league
+        this.league?.toDto()
     )
 
     companion object {
@@ -36,7 +39,7 @@ class TeamEntity(
             dto.players.map {
                 PlayerEntity.fromDto(it)
             }.toMutableList(),
-            dto.league
+            dto.league?.let { LeagueEntity.fromDto(it) }
         )
     }
 }
