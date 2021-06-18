@@ -10,7 +10,8 @@ enum class Position { GOALKEEPER, DEFENDER, MIDFIELDER, STRIKER }
 @Table(name = "player")
 class PlayerEntity(
     @Id
-    var id: UUID,
+    var playerId: UUID,
+    @JoinColumn(name = "teamId")
     @ManyToOne(fetch = FetchType.LAZY)
     var team: TeamEntity? = null,
     var firstName: String,
@@ -22,7 +23,7 @@ class PlayerEntity(
     var skills: Int? = null
 ) {
     fun toDto(): PlayerDTO = PlayerDTO(
-        this.id,
+        this.playerId,
         this.firstName,
         this.lastName,
         this.position,

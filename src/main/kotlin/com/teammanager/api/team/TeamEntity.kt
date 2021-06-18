@@ -10,7 +10,7 @@ import javax.persistence.*
 @Table(name = "team")
 class TeamEntity(
     @Id
-    var id: UUID,
+    var teamId: UUID,
     var name: String,
     var owner: String,
     @OneToMany(
@@ -20,11 +20,12 @@ class TeamEntity(
     )
     var players: MutableList<PlayerEntity> = mutableListOf(),
 
+    @JoinColumn(name = "leagueId")
     @ManyToOne(fetch = FetchType.LAZY)
     var league: LeagueEntity? = null,
 ) {
     fun toDto(): TeamEntityDTO = TeamEntityDTO(
-        this.id,
+        this.teamId,
         this.name,
         this.owner,
         this.players.map { it.toDto() }.toMutableList(),

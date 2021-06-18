@@ -3,22 +3,23 @@ package com.teammanager.api.league
 
 import com.teammanager.api.team.TeamEntity
 import java.util.*
-import javax.persistence.CascadeType
-import javax.persistence.Id
-import javax.persistence.OneToMany
+import javax.persistence.*
 
+@Entity
+@Table(name = "league")
 class LeagueEntity(
     @Id
-    var id: UUID,
+    var leagueId: UUID,
     var name: String,
     @OneToMany(
-        mappedBy = "league", cascade = arrayOf(CascadeType.ALL),
+        mappedBy = "league",
+        cascade = [CascadeType.ALL],
         orphanRemoval = true
     )
     var teams: MutableList<TeamEntity> = mutableListOf()
-){
+) {
     fun toDto(): LeagueDTO = LeagueDTO(
-        this.id,
+        this.leagueId,
         this.name,
         this.teams.map { it.toDto() }.toMutableList(),
     )
